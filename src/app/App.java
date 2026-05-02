@@ -1,5 +1,6 @@
 package app;
 
+import java.sql.Date;
 import java.util.List;
 
 import models.dao.DaoFactory;
@@ -28,5 +29,6 @@ public class App {
         for (Seller obj : list) {
             System.out.println(obj);
         }
+
     }
 }
