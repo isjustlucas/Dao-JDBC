@@ -107,7 +107,7 @@ public class Seller implements Serializable {
         sb.append("Email: " + email + "\n");
         sb.append("Birthdate: " + birthDate + "\n");
         sb.append("Base Salary: " + baseSalary + "\n");
-        sb.append("Department: " + department + "\n");
+        sb.append("Department: " + department);
         return sb.toString();
     }
 

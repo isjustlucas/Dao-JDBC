@@ -29,11 +29,11 @@ public class SellerDaoJDBC implements SellerDao {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement(
-                "INSERT INTO seller "
-                + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
-                + "VALUES"
-                + "(?, ?, ?, ?, ?)", java.sql.Statement.RETURN_GENERATED_KEYS
-            );
+                    "INSERT INTO seller "
+                            + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+                            + "VALUES"
+                            + "(?, ?, ?, ?, ?)",
+                    java.sql.Statement.RETURN_GENERATED_KEYS);
             st.setString(1, obj.getName());
             st.setString(2, obj.getEmail());
             st.setDate(3, new Date(obj.getBirthDate().getTime()));
@@ -59,7 +59,24 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void update(Seller obj) {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        PreparedStatement st = null;
+        try {
+            st = conn.prepareStatement(
+                    "UPDATE seller "
+                            + "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
+                            + "WHERE Id = ?");
+            st.setString(1, obj.getName());
+            st.setString(2, obj.getEmail());
+            st.setDate(3, new Date(obj.getBirthDate().getTime()));
+            st.setDouble(4, obj.getBaseSalary());
+            st.setInt(5, obj.getDepartment().getId());
+            st.setInt(6, obj.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
@@ -125,7 +142,7 @@ public class SellerDaoJDBC implements SellerDao {
 
             rs = st.executeQuery();
             List<Seller> list = new ArrayList<>();
-            Map<Integer, Department> map = new HashMap<>(); 
+            Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()) {
                 Department dep = map.get(rs.getInt("DepartmentId"));
@@ -160,7 +177,7 @@ public class SellerDaoJDBC implements SellerDao {
             rs = st.executeQuery();
 
             List<Seller> list = new ArrayList<>();
-            Map<Integer, Department> map = new HashMap<>(); 
+            Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()) {
                 Department dep = map.get(rs.getInt("DepartmentId"));
